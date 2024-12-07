@@ -12,9 +12,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+//axios
+import axios from "axios";
+
 // icons
 import { CiAt, CiLock } from "react-icons/ci";
-import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router";
 
@@ -40,7 +42,7 @@ const LoginForm = () => {
       let config = {
         method: "post",
         maxBodyLength: Infinity,
-        url: "https://take-home-test-api.nutech-integrasi.com/login",
+        url: `${import.meta.env.VITE_BASE_URL}/login`,
         headers: {
           "Content-Type": "application/json",
         },
