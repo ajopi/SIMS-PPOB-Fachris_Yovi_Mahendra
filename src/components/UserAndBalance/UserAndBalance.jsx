@@ -13,7 +13,7 @@ const UserAndBalance = () => {
   const dotCount = 7;
 
   const dispatch = useDispatch();
-  const { isLoading, profile, balance } = useSelector((state) => state.user);
+  const { isLoadingProfile, profile, balance } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(fetchUser());
@@ -21,7 +21,7 @@ const UserAndBalance = () => {
   }, [dispatch]);
 
 
-  if (isLoading) {
+  if (isLoadingProfile) {
     return <div>Loading...</div>;
   }
 

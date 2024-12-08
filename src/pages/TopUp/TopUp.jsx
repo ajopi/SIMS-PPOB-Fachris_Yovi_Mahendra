@@ -1,3 +1,4 @@
+import DialogDefault from "@/components/DialogDefault/DialogDefault";
 import UserAndBalance from "@/components/UserAndBalance/UserAndBalance";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,19 +9,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 import { topUpBalanceFormSchema } from "@/lib/form-schema";
 import { fetchBalance } from "@/redux/userSlice";
 import { topUpBalance } from "@/services/topup";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 //icons
 import { MdMoney } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { rupiahFormat } from "@/lib/utils";
 
 const TopUp = () => {
-  const { toast } = useToast();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogMode, setDialogMode] = useState("confirm");
+
   const dispatch = useDispatch();
   const form = useForm({
     resolver: zodResolver(topUpBalanceFormSchema),
@@ -30,21 +34,32 @@ const TopUp = () => {
     mode: "onChange",
   });
 
-  const onSubmit = async (val) => {
+  const continuePayment = async (val) => {
     try {
       const response = await topUpBalance(val.balance);
-      toast({
-        title: "Top Up Balance Success",
-        className: "bg-[#4ade80] text-white",
-      });
       dispatch(fetchBalance());
+      setDialogMode("success");
       console.log(response);
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(form.getValues());
+  const onSubmit = async (val) => {
+    console.log(val);
+    setIsDialogOpen(!isDialogOpen);
+  };
+
+  const handleBackHome = () => {
+    setIsDialogOpen(false);
+    setDialogMode("confirm");
+  };
+
+  const handleDialogFail = () => {
+    setDialogMode("error");
+  };
+
+  console.log(form.getValues().balance);
   return (
     <div className="flex flex-col">
       <UserAndBalance />
@@ -87,6 +102,15 @@ const TopUp = () => {
                 >
                   Top up
                 </Button>
+                <DialogDefault
+                  open={isDialogOpen}
+                  openChange={() => setIsDialogOpen(!isDialogOpen)}
+                  payment={form.handleSubmit(continuePayment)}
+                  dialogMode={dialogMode}
+                  onBackHome={handleBackHome}
+                  onCancel={handleDialogFail}
+                  balance={rupiahFormat(form.getValues().balance)}
+                />
               </form>
             </Form>
           </div>

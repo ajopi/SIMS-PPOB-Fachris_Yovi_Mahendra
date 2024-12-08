@@ -3,9 +3,9 @@ import { Navigate, Outlet } from "react-router";
 const ProtectedRoute = () => {
   const user = localStorage.getItem("token");
   try {
-    const payload = JSON.parse(atob(user.split(".")[1]));
+    const payload = JSON.parse(atob(user?.split(".")[1]));
     const currentTime = Math.floor(Date.now() / 1000);
-    if (payload.exp < currentTime) {
+    if (payload?.exp < currentTime) {
       localStorage.removeItem("token");
       return <Navigate to={"/"} />;
     }

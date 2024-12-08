@@ -10,14 +10,12 @@ const Payment = () => {
   const { services, isLoading } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!services) {
-      console.log("fetching data....");
-
+    console.log('state isLoading: ', isLoading)
+    if (!services && !isLoading) {
+      console.log(services);
       dispatch(fetchServices());
-    } else {
-      console.log("data:", selectedService);
     }
-  }, [dispatch, services]);
+  }, [dispatch, services, isLoading]);
 
   const selectedService = services?.data?.find(
     (service) => service.service_code === id
@@ -29,7 +27,7 @@ const Payment = () => {
   if (!selectedService) {
     return <p>Service Not Found!</p>;
   }
-  //   console.log(selectedService);
+  console.log(selectedService);
 
   return (
     <div className="flex flex-col">

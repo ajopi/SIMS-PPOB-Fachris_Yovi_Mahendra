@@ -15,27 +15,97 @@ import { useForm } from "react-hook-form";
 import { CiAt } from "react-icons/ci";
 import { MdOutlinePerson } from "react-icons/md";
 import { FaPen } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchUser } from "@/redux/userSlice";
+import { logout, updateImage, updateProfile } from "@/services/Account";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/hooks/use-toast";
 
 const Account = () => {
+  const dispatch = useDispatch();
+  const { profile, isLoadingProfile } = useSelector((state) => state.user);
+  const { toast } = useToast();
+
   const form = useForm({
     resolver: zodResolver(updateAccountFormSchema),
     defaultValues: {
-      email: "johnDoe@gmail.com",
-      firstName: "John",
-      lastName: "Doe",
+      email: "",
+      firstName: "",
+      lastName: "",
     },
   });
 
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (profile?.data) {
+      form.reset({
+        email: profile.data.email,
+        firstName: profile.data.first_name,
+        lastName: profile.data.last_name,
+      });
+    }
+  }, [profile, form]);
+
+  if (isLoadingProfile) {
+    return <div>Loading....</div>;
+  }
+
+  const user = profile?.data;
+  console.log(user);
+
   const onSubmit = async (val) => {
     console.log(val);
+
+    try {
+      const response = await updateProfile(val.firstName, val.lastName);
+      console.log(response.data);
+      if (response.status === 200) {
+        dispatch(fetchUser());
+        toast({
+          title: "Update Profile Succeed",
+          className: "bg-green-500 text-white",
+        });
+      }
+    } catch (error) {
+      console.error("error update profile", error);
+    }
   };
 
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      try {
+        const response = await updateImage(file);
+        if (response.status === 200) {
+          dispatch(fetchUser());
+        }
+      } catch (error) {
+        console.error("Error update image:", error);
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    try {
+      logout();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="flex flex-col gap-3 items-center">
       <div className="flex flex-col gap-4 items-center mb-14">
         <div className="relative">
           <img
-            src="/src/assets/WebsiteAssets/Profile Photo.png"
+            src={
+              user?.profile_image ||
+              "/src/assets/WebsiteAssets/Profile Photo.png"
+            }
             alt="profile"
             className="w-[100px] h-[100px] object-cover rounded-full"
           />
@@ -49,10 +119,13 @@ const Account = () => {
             id="upload-profile"
             type="file"
             className="hidden"
-            // onChange={handleUpload}
+            accept="image/png, image/jpeg"
+            onChange={handleImageChange}
           />
         </div>
-        <span className="text-3xl font-bold">John Doe</span>
+        <span className="text-3xl font-bold">
+          {user?.first_name + " " + user?.last_name}
+        </span>
       </div>
 
       <div className=" w-[600px] space-y-3">
@@ -123,10 +196,14 @@ const Account = () => {
             </Button>
           </form>
         </Form>
-        <Button className="bg-white text-red-600 border border-red-600 hover:text-white w-full">
+        <Button
+          onClick={handleLogout}
+          className="bg-white text-red-600 border border-red-600 hover:text-white w-full"
+        >
           Logout
         </Button>
       </div>
+      <Toaster />
     </div>
   );
 };
