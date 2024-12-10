@@ -42,5 +42,4 @@ export const updateProfile = async (firstName, lastName) => {
 
 export const logout = () => {
   localStorage.removeItem("token");
-  window.location.reload();
 };

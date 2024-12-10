@@ -1,7 +1,7 @@
 import { registerFormSchema } from "@/lib/form-schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import logo from "@/assets/WebsiteAssets/Logo.png";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -71,11 +71,7 @@ const RegisterForm = () => {
   return (
     <>
       <div className="flex justify-center text-2xl font-semibold ">
-        <img
-          className="w-[30px] h-[30px] mr-1"
-          alt="logo"
-          src="/src/assets/WebsiteAssets/Logo.png"
-        />
+        <img className="w-[30px] h-[30px] mr-1" alt="logo" src={logo} />
         SIMS PPOB
       </div>
       <div className="text-2xl font-bold text-center">

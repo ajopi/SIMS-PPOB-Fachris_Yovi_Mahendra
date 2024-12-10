@@ -21,13 +21,14 @@ import { fetchUser } from "@/redux/userSlice";
 import { logout, updateImage, updateProfile } from "@/services/Account";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router";
 
 const Account = () => {
   const [editMode, setEditMode] = useState(false);
   const dispatch = useDispatch();
   const { profile, isLoadingProfile } = useSelector((state) => state.user);
   const { toast } = useToast();
-
+  const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(updateAccountFormSchema),
     defaultValues: {
@@ -107,6 +108,7 @@ const Account = () => {
   const handleLogout = () => {
     try {
       logout();
+      navigate("/");
     } catch (error) {
       console.error(error);
     }

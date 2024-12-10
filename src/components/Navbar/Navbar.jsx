@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router";
-
+import logo from "@/assets/WebsiteAssets/Logo.png";
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const Navbar = () => {
         className="flex items-center gap-1 cursor-pointer"
         onClick={() => navigate("/homepage")}
       >
-        <img alt="logo" src="/src/assets/WebsiteAssets/Logo.png" />
+        <img alt="logo" src={logo} />
         <span className="text-xl font-normal">SIMS PPOB</span>
       </div>
 
