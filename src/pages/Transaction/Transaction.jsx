@@ -21,7 +21,7 @@ const Transaction = () => {
     return <div>Loading....</div>;
   }
   const data = transactionHistory?.data?.records;
-  console.log(data);
+  console.log(data.length);
 
   // console.log(data?.created_on);
 
@@ -40,12 +40,16 @@ const Transaction = () => {
           />
         );
       })}
-      <Button
-        className="bg-transparent text-red-500 hover:bg-transparent hover:text-red-400"
-        onClick={() => setLimit(limit + limit)}
-      >
-        Show More
-      </Button>
+      {data?.length === 0 ? (
+        <div className="text-gray-500 text-center">Maaf tidak ada history transaksi</div>
+      ) : (
+        <Button
+          className="bg-transparent text-red-500 hover:bg-transparent hover:text-red-400"
+          onClick={() => setLimit(limit + limit)}
+        >
+          Show More
+        </Button>
+      )}
     </div>
   );
 };
