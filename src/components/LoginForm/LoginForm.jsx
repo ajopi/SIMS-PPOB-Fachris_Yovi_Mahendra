@@ -20,6 +20,7 @@ import { CiAt, CiLock } from "react-icons/ci";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router";
 
+import logo from "@/assets/WebsiteAssets/Logo.png";
 const LoginForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -68,11 +69,7 @@ const LoginForm = () => {
   return (
     <>
       <div className="flex justify-center text-2xl font-semibold ">
-        <img
-          className="w-[30px] h-[30px] mr-1"
-          alt="logo"
-          src="/src/assets/WebsiteAssets/Logo.png"
-        />
+        <img className="w-[30px] h-[30px] mr-1" alt="logo" src={logo} />
         SIMS PPOB
       </div>
       <div className="text-3xl font-bold text-center">
