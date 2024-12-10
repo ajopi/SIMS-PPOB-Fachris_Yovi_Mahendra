@@ -8,18 +8,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchBalance, fetchUser } from "@/redux/userSlice";
 import { rupiahFormat } from "@/lib/utils";
 
+import profilePhoto from "@/assets/WebsiteAssets/ProfilePhoto.png";
 const UserAndBalance = () => {
   const [isOpen, setisOpen] = useState(false);
   const dotCount = 7;
 
   const dispatch = useDispatch();
-  const { isLoadingProfile, profile, balance } = useSelector((state) => state.user);
+  const { isLoadingProfile, profile, balance } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     dispatch(fetchUser());
     dispatch(fetchBalance());
   }, [dispatch]);
-
 
   if (isLoadingProfile) {
     return <div>Loading...</div>;
@@ -31,8 +33,9 @@ const UserAndBalance = () => {
         <img
           className="w-[70px] h-[70px] rounded-full"
           src={
-            profile?.data?.profile_image ||
-            "/src/assets/WebsiteAssets/Profile Photo.png"
+            profile?.data?.profile_image.includes("null")
+              ? profilePhoto
+              : profile?.data?.profile_image || profilePhoto
           }
           alt="pict profile"
         />

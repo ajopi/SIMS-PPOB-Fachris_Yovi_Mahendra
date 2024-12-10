@@ -47,7 +47,7 @@ const Dashboard = () => {
 
           <div className="flex flex-col mt-5 gap-2">
             <span>Temukan promo menarik</span>
-            <div className="flex flex-row justify-between overflow-x-auto gap-4">
+            <div className="flex flex-row justify-between overflow-x-auto gap-5">
               {banner?.data?.map((items) => {
                 return (
                   <img
@@ -57,6 +57,7 @@ const Dashboard = () => {
                       "/src/assets/WebsiteAssets/Banner 1.png"
                     }
                     alt="banner"
+                    className="h-[175px]"
                   />
                 );
               })}

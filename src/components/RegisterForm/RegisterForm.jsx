@@ -182,7 +182,7 @@ const RegisterForm = () => {
             )}
           />
           <Button className="w-full" type="submit">
-            Masuk
+            Registrasi
           </Button>
         </form>
       </Form>

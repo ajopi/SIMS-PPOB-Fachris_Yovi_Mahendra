@@ -23,6 +23,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router";
 
+import profilePhoto from "@/assets/WebsiteAssets/ProfilePhoto.png";
+
 const Account = () => {
   const [editMode, setEditMode] = useState(false);
   const dispatch = useDispatch();
@@ -119,8 +121,9 @@ const Account = () => {
         <div className="relative">
           <img
             src={
-              user?.profile_image ||
-              "/src/assets/WebsiteAssets/Profile Photo.png"
+              user?.profile_image.includes("null")
+                ? profilePhoto
+                : user?.profile_image || profilePhoto
             }
             alt="profile"
             className="w-[100px] h-[100px] object-cover rounded-full"

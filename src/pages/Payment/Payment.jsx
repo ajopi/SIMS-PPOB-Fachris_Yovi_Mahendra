@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Toaster } from "@/components/ui/toaster";
 import UserAndBalance from "@/components/UserAndBalance/UserAndBalance";
 import { useToast } from "@/hooks/use-toast";
-import { fetchServices } from "@/redux/userSlice";
+import { fetchBalance, fetchServices } from "@/redux/userSlice";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+
+import { MdMoney } from "react-icons/md";
 
 const Payment = () => {
   const { toast } = useToast();
@@ -60,9 +61,15 @@ const Payment = () => {
           className: "bg-green-500 text-white",
         });
       }
+      dispatch(fetchBalance());
       return response.data;
     } catch (error) {
       console.error(error);
+      toast({
+        title: "Payment error",
+        description: "Insufficient amount of balance",
+        className: "bg-red-500 text-white",
+      });
     }
   };
   return (
@@ -82,7 +89,10 @@ const Payment = () => {
           <span className="font-bold">{selectedService?.service_name}</span>
         </div>
 
-        <Input disabled value={selectedService.service_tariff} />
+        <span className="flex items-center gap-1 p-2 text-gray-500 border border-gray-500 rounded-md">
+          <MdMoney />
+          {selectedService.service_tariff}
+        </span>
         <Button onClick={() => handlePayment(selectedService?.service_code)}>
           Bayar
         </Button>
