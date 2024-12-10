@@ -8,7 +8,7 @@ const Homepage = () => {
     <div className="flex flex-col ">
       <Navbar />
 
-      <div className="px-8 pt-4">
+      <div className="px-8 py-5">
         <Outlet />
         <Toaster />
       </div>

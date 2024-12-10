@@ -10,6 +10,8 @@ const initialState = {
   services: null,
   isLoadingBanner: false,
   banner: null,
+  isLoadingTransactionHistory: false,
+  transactionHistory: null,
   error: false,
 };
 
@@ -71,6 +73,26 @@ export const fetchBanner = createAsyncThunk("userBanner", async () => {
   const response = await axios.request(config);
   return response.data;
 });
+
+export const fetchTransactionHistory = createAsyncThunk(
+  "userTransaction",
+  async ({ offset, limit }) => {
+    const token = await localStorage.getItem("token");
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `${
+        import.meta.env.VITE_BASE_URL
+      }/transaction/history?offset=${offset}&limit=${limit}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.request(config);
+    return response.data;
+  }
+);
 
 const userSlice = createSlice({
   name: "getUserProfile",
@@ -137,6 +159,22 @@ const userSlice = createSlice({
       })
       .addCase(fetchBanner.rejected, (state, action) => {
         state.isLoadingBanner = false;
+        state.error = action.error.message;
+      });
+
+    // fetch Transaction History
+    builder
+      .addCase(fetchTransactionHistory.fulfilled, (state, action) => {
+        state.isLoadingTransactionHistory = false;
+        state.transactionHistory = action.payload;
+        state.error = false;
+      })
+      .addCase(fetchTransactionHistory.pending, (state) => {
+        state.isLoadingTransactionHistory = true;
+        state.error = false;
+      })
+      .addCase(fetchTransactionHistory.rejected, (state, action) => {
+        state.isLoadingTransactionHistory = false;
         state.error = action.error.message;
       });
   },
